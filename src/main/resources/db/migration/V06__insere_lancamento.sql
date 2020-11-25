@@ -1,0 +1,6 @@
+INSERT INTO lancamento (descricao, data_vencimento, data_pagamento, valor, observacao, tipo, codigo_categoria, codigo_pessoa) VALUES ('salario', '2020-07-01', null, 5000.00, 'uma obs', 'RECEITA', 5, 2);
+INSERT INTO lancamento (descricao, data_vencimento, data_pagamento, valor, observacao, tipo, codigo_categoria, codigo_pessoa) VALUES ('cartao de credito', '2020-07-01', null, 2000.00, 'uma obs', 'DESPESA', 2, 1);
+INSERT INTO lancamento (descricao, data_vencimento, data_pagamento, valor, observacao, tipo, codigo_categoria, codigo_pessoa) VALUES ('cartao de credito', '2020-07-01', null, 2000.00, 'uma obs', 'DESPESA', 2, 2);
+INSERT INTO lancamento (descricao, data_vencimento, data_pagamento, valor, observacao, tipo, codigo_categoria, codigo_pessoa) VALUES ('salario', '2020-07-01', null, 7000.00, 'uma obs', 'RECEITA', 5, 1);
+INSERT INTO lancamento (descricao, data_vencimento, data_pagamento, valor, observacao, tipo, codigo_categoria, codigo_pessoa) VALUES ('mercado', '2020-07-15', null, 500.00, 'uma obs', 'RECEITA', 2, 1);
+INSERT INTO lancamento (descricao, data_vencimento, data_pagamento, valor, observacao, tipo, codigo_categoria, codigo_pessoa) VALUES ('shopping', '2020-07-01', null, 400.00, 'uma obs', 'RECEITA', 1, 1);
