@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import com.algamoney.service.exception.PessoaInexistenteOuInativaException;
+
 @ControllerAdvice
 public class AlgaMoneyExceptionHandler extends ResponseEntityExceptionHandler {
 	
@@ -50,6 +52,14 @@ public class AlgaMoneyExceptionHandler extends ResponseEntityExceptionHandler {
 	@ExceptionHandler({ EmptyResultDataAccessException.class })
 	public ResponseEntity<Object> handleEmptyResultDataAcessException(EmptyResultDataAccessException ex, WebRequest request) {
 		String menssagemUsuario = messageSource.getMessage("recurso.nao-encontrado", null, LocaleContextHolder.getLocale());
+		String mensageDesenvolvedor = ex.toString();
+		List<Erro> erros = Arrays.asList(new Erro(menssagemUsuario, mensageDesenvolvedor));
+		return  handleExceptionInternal(ex , erros ,new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+	}
+	
+	@ExceptionHandler({ PessoaInexistenteOuInativaException.class })
+	public ResponseEntity<Object> handlePessoaInexistenteOuInativaException(PessoaInexistenteOuInativaException ex, WebRequest request) {
+		String menssagemUsuario = messageSource.getMessage("recurso.pessoa-inexistente-inativa", null, LocaleContextHolder.getLocale());
 		String mensageDesenvolvedor = ex.toString();
 		List<Erro> erros = Arrays.asList(new Erro(menssagemUsuario, mensageDesenvolvedor));
 		return  handleExceptionInternal(ex , erros ,new HttpHeaders(), HttpStatus.NOT_FOUND, request);

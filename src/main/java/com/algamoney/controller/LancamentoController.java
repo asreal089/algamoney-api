@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.algamoney.event.RecursoCriadoEvent;
 import com.algamoney.model.Lancamento;
 import com.algamoney.repository.LancamentoRepository;
+import com.algamoney.service.LancamentoService;
+import com.algamoney.service.exception.PessoaInexistenteOuInativaException;
 
 @RestController
 @RequestMapping("/lancamentos")
@@ -31,6 +33,9 @@ public class LancamentoController {
 	
 	@Autowired 
 	private LancamentoRepository lancamentoRepository;
+	
+	@Autowired
+	private LancamentoService lancamentoService;
 	
 	@GetMapping
 	public ResponseEntity<?> getLancamentos(){
@@ -48,8 +53,8 @@ public class LancamentoController {
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<Lancamento> criarLancamento(@Valid @RequestBody Lancamento lancamento, HttpServletResponse response) {
-		Lancamento lancamentoSalvo = lancamentoRepository.save(lancamento);
+	public ResponseEntity<Lancamento> criarLancamento(@Valid @RequestBody Lancamento lancamento, HttpServletResponse response) throws PessoaInexistenteOuInativaException {
+		Lancamento lancamentoSalvo = lancamentoService.salvarLancamento(lancamento);
 		publisher.publishEvent(new RecursoCriadoEvent(this, response, lancamentoSalvo.getCodigo()));
 		return ResponseEntity.status(HttpStatus.CREATED).body(lancamentoSalvo);
 	}
