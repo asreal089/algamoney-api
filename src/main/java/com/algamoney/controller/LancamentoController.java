@@ -41,7 +41,6 @@ public class LancamentoController {
 	@GetMapping
 	public ResponseEntity<?> getLancamentos(LancamentoFilter lancamentoFilter){
 		List<?> lancamentos = lancamentoRepository.filtrar(lancamentoFilter);
-		
 		return !lancamentos.isEmpty()? ResponseEntity.ok(lancamentos) : ResponseEntity.noContent().build();
 	}
 	
