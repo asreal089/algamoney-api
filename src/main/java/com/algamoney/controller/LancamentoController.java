@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.algamoney.event.RecursoCriadoEvent;
 import com.algamoney.model.Lancamento;
 import com.algamoney.repository.LancamentoRepository;
+import com.algamoney.repository.filter.LancamentoFilter;
 import com.algamoney.service.LancamentoService;
 import com.algamoney.service.exception.PessoaInexistenteOuInativaException;
 
@@ -38,8 +39,8 @@ public class LancamentoController {
 	private LancamentoService lancamentoService;
 	
 	@GetMapping
-	public ResponseEntity<?> getLancamentos(){
-		List<?> lancamentos = lancamentoRepository.findAll();
+	public ResponseEntity<?> getLancamentos(LancamentoFilter lancamentoFilter){
+		List<?> lancamentos = lancamentoRepository.filtrar(lancamentoFilter);
 		
 		return !lancamentos.isEmpty()? ResponseEntity.ok(lancamentos) : ResponseEntity.noContent().build();
 	}
