@@ -12,7 +12,6 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import com.algamoney.model.Lancamento;
-import com.algamoney.model.Lancamento_;
 import com.algamoney.repository.filter.LancamentoFilter;
 
 public class LancamentoRepositoryImpl implements LacamentoRepositoryQuery{
@@ -37,13 +36,13 @@ public class LancamentoRepositoryImpl implements LacamentoRepositoryQuery{
 	private Predicate[] criarFiltro(LancamentoFilter lancamentoFilter, CriteriaBuilder cb, Root<Lancamento> root) {
 		List<Predicate> predicates = new ArrayList<>();
 		if(!lancamentoFilter.getDescricao().isEmpty()) {
-			predicates.add(cb.like(cb.lower(root.get(Lancamento_.DESCRICAO)), "%"+lancamentoFilter.getDescricao().toLowerCase()+"%"));
+			predicates.add(cb.like(cb.lower(root.get("descricao")), "%"+lancamentoFilter.getDescricao().toLowerCase()+"%"));
 		}
 		if(lancamentoFilter.getDataVencimentoAte()!=null) {
-			predicates.add(cb.lessThanOrEqualTo(root.get(Lancamento_.DATA_VENCIMENTO), lancamentoFilter.getDataVencimentoAte().toString()));
+			predicates.add(cb.lessThanOrEqualTo(root.get("data_vencimento"), lancamentoFilter.getDataVencimentoAte().toString()));
 		}
 		if(lancamentoFilter.getDataVencimentoDe()!=null) {
-			predicates.add(cb.greaterThanOrEqualTo(root.get(Lancamento_.DATA_VENCIMENTO), lancamentoFilter.getDataVencimentoDe()));
+			predicates.add(cb.greaterThanOrEqualTo(root.get("data_vencimento"), lancamentoFilter.getDataVencimentoDe()));
 		}
 		return predicates.toArray(new Predicate[predicates.size()]);
 	}
