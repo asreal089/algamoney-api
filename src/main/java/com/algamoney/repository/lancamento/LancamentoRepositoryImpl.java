@@ -35,14 +35,14 @@ public class LancamentoRepositoryImpl implements LacamentoRepositoryQuery{
 
 	private Predicate[] criarFiltro(LancamentoFilter lancamentoFilter, CriteriaBuilder cb, Root<Lancamento> root) {
 		List<Predicate> predicates = new ArrayList<>();
-		if(!lancamentoFilter.getDescricao().isEmpty()) {
+		if(lancamentoFilter.getDescricao()!= null) {
 			predicates.add(cb.like(cb.lower(root.get("descricao")), "%"+lancamentoFilter.getDescricao().toLowerCase()+"%"));
 		}
 		if(lancamentoFilter.getDataVencimentoAte()!=null) {
-			predicates.add(cb.lessThanOrEqualTo(root.get("data_vencimento"), lancamentoFilter.getDataVencimentoAte().toString()));
+			predicates.add(cb.lessThanOrEqualTo(root.get("dataVencimento"), lancamentoFilter.getDataVencimentoAte().toString()));
 		}
 		if(lancamentoFilter.getDataVencimentoDe()!=null) {
-			predicates.add(cb.greaterThanOrEqualTo(root.get("data_vencimento"), lancamentoFilter.getDataVencimentoDe()));
+			predicates.add(cb.greaterThanOrEqualTo(root.get("dataVencimento"), lancamentoFilter.getDataVencimentoDe()));
 		}
 		return predicates.toArray(new Predicate[predicates.size()]);
 	}

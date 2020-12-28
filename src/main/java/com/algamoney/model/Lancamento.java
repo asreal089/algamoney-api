@@ -1,6 +1,6 @@
 package com.algamoney.model;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,6 +13,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name="lancamento")
@@ -27,10 +29,12 @@ public class Lancamento {
     
 	@NotNull
     @Column(name="data_vencimento")
-    private Date dataVencimento;
+	@DateTimeFormat(pattern="yyyy-MM-dd")
+    private LocalDate dataVencimento;
     
     @Column(name="data_pagamento")
-    private Date dataPagamento;
+    @DateTimeFormat(pattern="yyyy-MM-dd")
+    private LocalDate dataPagamento;
     
     @NotNull
     private double valor;
@@ -63,16 +67,16 @@ public class Lancamento {
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
 	}
-	public Date getDataVencimento() {
+	public LocalDate getDataVencimento() {
 		return dataVencimento;
 	}
-	public void setDataVencimento(Date dataVencimento) {
+	public void setDataVencimento(LocalDate dataVencimento) {
 		this.dataVencimento = dataVencimento;
 	}
-	public Date getDataPagamento() {
+	public LocalDate getDataPagamento() {
 		return dataPagamento;
 	}
-	public void setDataPagamento(Date dataPagamento) {
+	public void setDataPagamento(LocalDate dataPagamento) {
 		this.dataPagamento = dataPagamento;
 	}
 	public double getValor() {
