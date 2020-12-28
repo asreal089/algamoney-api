@@ -11,6 +11,11 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+
 import com.algamoney.model.Lancamento;
 import com.algamoney.repository.filter.LancamentoFilter;
 
@@ -20,7 +25,7 @@ public class LancamentoRepositoryImpl implements LacamentoRepositoryQuery{
 	private EntityManager entityManager;
 
 	@Override
-	public List<Lancamento> filtrar(LancamentoFilter lancamentoFilter) {
+	public Page<Lancamento> filtrar(LancamentoFilter lancamentoFilter, Pageable pageable) {
 		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Lancamento> critiria = cb.createQuery(Lancamento.class);
 		Root<Lancamento> root = critiria.from(Lancamento.class);
@@ -29,8 +34,29 @@ public class LancamentoRepositoryImpl implements LacamentoRepositoryQuery{
 		
 		critiria.where(predicates);
 		TypedQuery<Lancamento> query = entityManager.createQuery(critiria);
-		System.out.println(query.toString());
-		return query.getResultList(); 
+		
+		adicionarRestricoesDePagina(query, pageable);
+		
+		return new PageImpl<>(query.getResultList(), pageable, total(lancamentoFilter)); 
+	}
+
+	private Long total(LancamentoFilter lancamentoFilter) {
+		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Long> criteria = cb.createQuery(Long.class);
+		Root<Lancamento> root = criteria.from(Lancamento.class);
+		Predicate[] predicados = criarFiltro(lancamentoFilter, cb, root);
+		criteria.where(predicados);
+		criteria.select(cb.count(root));
+		return entityManager.createQuery(criteria).getSingleResult();
+	}
+
+	private void adicionarRestricoesDePagina(TypedQuery<Lancamento> query, Pageable pageable) {
+		int paginaAtual = pageable.getPageNumber();
+		int totalDeRegistrosPorPagina = pageable.getPageSize();
+		int primeiroRegistroDaPagina = paginaAtual* totalDeRegistrosPorPagina;
+		query.setFirstResult(primeiroRegistroDaPagina);
+		query.setMaxResults(totalDeRegistrosPorPagina);
+		
 	}
 
 	private Predicate[] criarFiltro(LancamentoFilter lancamentoFilter, CriteriaBuilder cb, Root<Lancamento> root) {

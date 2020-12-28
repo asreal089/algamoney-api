@@ -1,6 +1,5 @@
 package com.algamoney.controller;
 
-import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
@@ -8,8 +7,11 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,8 +41,8 @@ public class LancamentoController {
 	private LancamentoService lancamentoService;
 	
 	@GetMapping
-	public ResponseEntity<?> getLancamentos(LancamentoFilter lancamentoFilter){
-		List<?> lancamentos = lancamentoRepository.filtrar(lancamentoFilter);
+	public ResponseEntity<?> getLancamentos(LancamentoFilter lancamentoFilter, Pageable pageable){
+		Page<?> lancamentos = lancamentoRepository.filtrar(lancamentoFilter, pageable);
 		return !lancamentos.isEmpty()? ResponseEntity.ok(lancamentos) : ResponseEntity.noContent().build();
 	}
 	
@@ -57,6 +59,12 @@ public class LancamentoController {
 		Lancamento lancamentoSalvo = lancamentoService.salvarLancamento(lancamento);
 		publisher.publishEvent(new RecursoCriadoEvent(this, response, lancamentoSalvo.getCodigo()));
 		return ResponseEntity.status(HttpStatus.CREATED).body(lancamentoSalvo);
+	}
+	
+	@DeleteMapping("/{codigo}")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void removerLancamento(@PathVariable Long codigo) {
+		lancamentoRepository.deleteById(codigo);
 	}
 	
 }
